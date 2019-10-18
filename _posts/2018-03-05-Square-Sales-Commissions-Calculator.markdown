@@ -32,8 +32,8 @@ To solve this problem we'll build a command line interface tool that we can run 
 # SEQUENCE
 I've broken these steps down into the folloiwng postings:
 * Project Setup is covered in this posting
-* [Part 1: Download Resources] - Covers steps 2 & 3
-* [Part 2: Filter Results] - Covers step 4
+* [Part 1: Defining Modules & Dependencies] - Requirnments
+* [Part 2: Collecting Data] - Covers step 2, 3 & 4
 * [Part 3: Math] - Covers steps 5 & 6
 * [Part 4: Notify Results] - Covers step 7
 
@@ -121,20 +121,21 @@ then under the notify section we'll add
 This should report back `2018-03-05` in the command line. If so, **congratulations!** 
 
 At this point your `cli.js` file should look something like this:
+{% highlight javascript %}
+/*
+*	CLI
+*
+*	This is the command line interface script
+*/
 
-    /*
-    *	CLI
-    *
-    *	This is the command line interface script
-    */
+//  DECLARE DEPENDENCIES
 
-    //  DECLARE DEPENDENCIES
+//   DEFINE LOCAL VARIABLES
+let dateparam = process.argv[2]
 
-    //	DEFINE LOCAL VARIABLES
-    let dateparam = process.argv[2]
-
-    //	NOTIFY PROGRESS
-    console.log(dateparam);
+//   NOTIFY PROGRESS
+console.log(dateparam);
+{% endhighlight %}
 
 If it does, lets push those changes to our github:
 
@@ -142,12 +143,12 @@ If it does, lets push those changes to our github:
     $ git commit -m "Add: CLI"
     $ git push origin master
 
-and move on to [Part 1 (Downloading Resources)]
+and move on to [Part 1: Defining Modules & Dependencies]
 
 [Square]: https://squareup.com/us/en
 [developer]: https://squareup.com/us/en/developers
-[Part 1: Download Resources]: /jekyll/update/2018/03/06/Square-Commissions-Part-1-Downloading-resources.html
-[Part 2: Filter Results]: /jekyll/update/2018/03/07/Square-Commissions-Part-2-Filter-Results.html
+[Part 1: Defining Modules & Dependencies]: /jekyll/update/2018/03/06/Square-Commissions-Part-1-Defining-Modules-and-Dependencies.html
+[Part 2: Collecting Data]: /jekyll/update/2018/03/07/Square-Commissions-Part-2-Collecting-Data.html
 [Part 3: Math]: /jekyll/update/2018/03/08/Square-Commissions-Part-3-Math.html
 [Part 4: Notify Results]: /jekyll/update/2018/03/09/Square-Commissions-Part-4-Notify-results.html
 [Node.js]: https://nodejs.org/en/
@@ -157,4 +158,3 @@ and move on to [Part 1 (Downloading Resources)]
 [sublime]: https://www.sublimetext.com
 [Visual Studio Code]: https://code.visualstudio.com
 [ianemcallister/sqrComCalc]: https://github.com/ianemcallister/sqrComCalc
-[Part 1 (Downloading Resources)]: /jekyll/update/2018/03/06/Square-Commissions-Part-1-Downloading-resources.html

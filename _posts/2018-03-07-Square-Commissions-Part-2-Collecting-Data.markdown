@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Square Commissions: Part 2 (Filter Results)"
+title:  "Square Commissions: Part 2 (Collecting Data)"
 date:   2018-03-07 21:04:19 +0900
 categories: jekyll update
 ---
