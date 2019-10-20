@@ -87,9 +87,167 @@ function dailyCommissions(date) {
 };
 {% endhighlight %}
 
+Moving into this **Daily Commissions** function lets comment out some of the sections we're going to need
+
+{% highlight javascript %}
+function dailyCommissions(date) {
+    //    DEFINE LOCAL VARIABLES
+    //    RETURN ASYNC WORK
+};
+{% endhighlight %}
+
+I always make space to add local variables, even before I know that I'll need them.  As for the async work, we're going to return the promise that we referenced form our `CLI.js` file.  It will look something like this:
+
+{% highlight javascript %}
+//    RETURN ASYNC WORK
+return new Promise(function dailyCommissionsPromise(resolve, reject) {
+    //    DEFINE LOCAL VARIABLES
+});
+{% endhighlight %}
+
+[Promises] are great, and an important tool for web development that must handle many situations were it takes data a moment to travel back and forth between servers and/or clients.
+
+Inside this promise we're going to need to pull together all of our information from our various sources, square, and our database.  Each of these will be their own promises, so we're goint to utilize the [Promise.all()] method in Javascript that will allow us to submit multiple promises and will wait for all of them to resolve before proceeding.
+
+So inside our **dailyCommissionsPromise** function lets define our array of promises as the following:
+
+{% highlight javascript %}
+//    DEFINE LOCAL VARIABLES
+let allData = [
+    square.getDailyTransactions(date),
+    firebase.getAllEmployees()
+];
+
+//    RETURN ASYNC WORK
+return new Promise(function dailyCommissionsPromise(resolve, reject) {
+    //    DEFINE LOCAL VARIABLES
+    
+});
+{% endhighlight %}
+
+So what we've done here is identify two functions (that we haven't written yet), that will each return their promises, that we want to resolve before we finish up processing our data.  In order to wait for them both to resolve we need to add the Promise.all() method:
+
+{% highlight javascript %}
+//    DEFINE LOCAL VARIABLES
+let allData = [
+    square.getDailyTransactions(date),
+    firebase.getAllEmployees()
+];
+
+//    RETURN ASYNC WORK
+return new Promise(function dailyCommissionsPromise(resolve, reject) {
+    //    DEFINE LOCAL VARIABLES
+    //    WAIT FOR ALL PROMISES TO RESOLVE BEFORE PROCESSSING DATA
+    Promise.all(allDataPromises)
+    .then(function success(allDataArray) {
+        resolve(allDataArray)
+    }).catch(function error(e) {
+    	reject(e);
+    });
+});
+{% endhighlight %}
+
+If all the promises resolve successfully we'll receive the **allDataArray** back, if an error occured somewhere that error will be pass back up the chain to where the original promise was first called so it can be handled there.  Eventually we'll want to add more logic when the data returns successfully, but for the moment we're going to resolve the data back up the chain.  
+
+This is also a good opportunity to commit our code before moving on to the next step.
+
+    $ git add .
+    $ git commit -m "Add: Daily Commissions Function"
+    $ git push origin master
+
+# GETTING OUR PROMISES WORKING
+If we run our code right now we're going to recieve an error because we haven't written our two square and firebase promise functions yet.  In the interest of having a working program as quickly as possible lets rough out those functions so we can make sure that our data is flowing properly. 
+
+First lets go into `squareAPI.js`.  In our module lets define our new function that we reference in the previous step, **getDailyTransactions(date)**:
+
+{% highlight javascript %}
+//	DEFINE THE MODULE
+let squareAPI = {
+    getDailyTransactions: getDailyTransactions,
+    test: function() { console.log('good square test'); }
+};
+{% endhighlight %}
+
+Next we'll add this function below under a section commented out as `// DEFINE PUBLIC FUNCITONS//` along with our commented explaination about what the function does, and our base structure of async work being returned.  We'll also resolve a simple messages so we can confirm everything is working properly:
+
+{% highlight javascript %}
+//	DEFINE PUBLIC FUNCTIONS
+/*
+*	GET DAILY TRANSACTIONS
+*
+*	This function accepts a date in YYYY-MM-DD format and returns all the square transactions for all locations on that date.
+*
+*	@param {string} date in YYYY-MM-DD format
+*	@return {object} collection of transactions returned from square 
+*/
+function getDailyTransactions(date) {
+	//	DEFINE LOCAL VARIABLES
+	//	RETURN ASYNC WORK
+	return new Promise(function getDailyTrainsactionsPromise(resolve, reject) {
+            resolve('good transactions test');
+	});
+};
+{% endhighlight %}
+
+But before we run our program we need to jump over to our `firebaseAPI.js` script and add our **getAllEmployees()** function.  So same as before, lets pop into our module first and add our function:
+
+{% highlight javascript %}
+//	DEFINE THE MODULE
+let firebaseAPI = {
+    getAllEmployees: getAllEmployees,
+    test: function() { console.log('good firebase test'); }
+};
+{% endhighlight %}
+
+Then lets define the function below:
+
+{% highlight javascript %}
+//	DEFINE PUBLIC FUNCTIONS
+/*
+*	GET ALL EMPLOYEES
+*
+*	This function will reach out to our databse (firebase in this case) and return a list of employees with all their prertinant information.
+*
+*	@return {object} collection of employee data
+*/
+function getAllEmployees() {
+	//	DEFINE LOCAL VARIABLES
+	//	RETURN ASYNC WORK
+	return new Promise(function getAllEmployeesPromise(resolve, reject) {
+		resolve('good database test');
+	});
+};
+{% endhighlight %}
+
+Great!  That should be enough to ensure that our scripts are properly wired up.  Lets head back to our command line and make sure it is.
+
+# TESTING FOR SUCCESS AND COMMITTING
+From the terminal lets go a head and run:
+
+    $ node cli 2018-03-07
+
+If everything is working properly we should get back:
+
+    [ 'good transactions test', 'good database test' ]
+
+I'm going to take this opportunity to commit again, just for good measure, as we have a working program now:
+
+    $ git add .
+    $ git commit -m "Add: getDailyTransactions and getAllEmployees functions"
+    $ git push origin master
+
+# FINALIZING OUR DATABASE MODULE
+The database is not the focus of this example so I'm not going to spend much time on it here, but for the sake of this tutorial we need the data from the database so lets fill it out.
+
+Lets head back into our **getAllEmployees** function, here we're going to utilize **firebase-admin** to access all of our employee records from our database, the implementation looks something like this:
+
+
+
 # MORE INFORMATION COMING SOON
 
 Lets move on to doing someing with this data in [Part 3: Math]
 
 [Square Sales Commissions Posting]: /jekyll/update/2018/03/05/Square-Sales-Commissions-Calculator.html
 [Part 3: Math]: /jekyll/update/2018/03/08/Square-Commissions-Part-3-Math.html
+[Promises]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise
+[Promise.all()]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/all
